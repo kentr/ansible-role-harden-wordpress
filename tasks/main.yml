@@ -1,2 +1,5 @@
 ---
 # tasks file for kentr.harden-wordpress
+
+- include: harden-instance.yml
+  with_items: "{{ installations }}"

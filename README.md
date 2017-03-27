@@ -1,22 +1,50 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Hardens existing WordPress installations following the [[security guidelines]](https://codex.wordpress.org/Hardening_WordPress#Website_Hosts).
+
+Creates backups of files that are modified.
+
+'''Warning''': This role modifies files and may break your site.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+* The various files modified must be writable by the SSH user.  `become` is not used.
+* For the `.htaccess` modifications to have any effect, the server must Apache and `AllowOverride` must be enabled.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### WordPress install location
+
+The role takes a list of installations to harden, in the variable `installations`:
+
+    installations:
+      - root: Required. Absolute path to the item's root web folder.  No default.
+        uploads_dir: Optional. Path to uploads directory, relative to the item's root.  Defaults to "wp-content/uploads".
+
+### Global hardening options:
+
+Disable PHP execution in uploads directory.
+See https://codex.wordpress.org/Hardening_WordPress#WP-Content.2FUploads
+
+    wordpress_harden_disable_uploads_php: True
+
+Deny access to wp-config.php.
+See https://codex.wordpress.org/Hardening_WordPress#WP-Config.php
+
+    wordpress_harden_deny_wpconfig_access: True
+
+Disable file editing.
+See https://codex.wordpress.org/Hardening_WordPress#Disable_File_Editing
+
+    wordpress_harden_disable_file_edits: True
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
@@ -25,7 +53,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: username.rolename, installations: list_of_installations }
 
 License
 -------
@@ -35,4 +63,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Kent Richards, https://kentrichards.net
