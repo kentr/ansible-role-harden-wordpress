@@ -1,7 +1,7 @@
 Role Name
 =========
 
-Hardens existing WordPress installations following the [[security guidelines]](https://codex.wordpress.org/Hardening_WordPress#Website_Hosts).
+Hardens existing WordPress installations for multiple installations on a host following the [[security guidelines]](https://codex.wordpress.org/Hardening_WordPress#Website_Hosts).
 
 Creates backups of files that are modified.
 
@@ -49,11 +49,9 @@ None.
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: servers
       roles:
-         - { role: username.rolename, installations: list_of_installations }
+         - { role: kentr.harden-wordpress, installations: list_of_installations }
 
 License
 -------
