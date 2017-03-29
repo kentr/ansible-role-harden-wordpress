@@ -1,4 +1,4 @@
-Role Name
+Harden WordPress
 =========
 
 Hardens existing WordPress installations for multiple installations on a host following the [[security guidelines]](https://codex.wordpress.org/Hardening_WordPress#Website_Hosts).
