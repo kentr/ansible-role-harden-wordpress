@@ -5,7 +5,7 @@ Hardens existing WordPress installations for multiple installations on a host fo
 
 Creates backups of files that are modified.
 
-'''Warning''': This role modifies files and may break your site.
+***WARNING***: This role modifies files and may break your site.
 
 Requirements
 ------------
