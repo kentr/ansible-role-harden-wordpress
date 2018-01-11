@@ -16,30 +16,33 @@ Requirements
 Role Variables
 --------------
 
-### WordPress install location
+    wp_harden_root: True
 
-The role takes a list of installations to harden, in the variable `installations`:
+WordPress install location
 
-    installations:
-      - root: Required. Absolute path to the item's root web folder.  No default.
-        uploads_dir: Optional. Path to uploads directory, relative to the item's root.  Defaults to "wp-content/uploads".
+    wp_harden_block_uploads_php: True
 
-### Global hardening options:
-
-Disable PHP execution in uploads directory.
+Block PHP execution in uploads directory.
 See https://codex.wordpress.org/Hardening_WordPress#WP-Content.2FUploads
 
-    wordpress_harden_disable_uploads_php: True
+    wp_harden_block_wpconfig: True
 
-Deny access to wp-config.php.
+Block access to wp-config.php.
 See https://codex.wordpress.org/Hardening_WordPress#WP-Config.php
 
-    wordpress_harden_deny_wpconfig_access: True
+    wp_harden_disable_file_edits: True
 
 Disable file editing.
 See https://codex.wordpress.org/Hardening_WordPress#Disable_File_Editing
 
-    wordpress_harden_disable_file_edits: True
+    wp_harden_block_include_only_files: True
+
+Block access to include-only files.
+See https://codex.wordpress.org/Hardening_WordPress#WP-Includes
+
+    wp_harden_block_log_files:l True
+
+Block access to some log files.
 
 Dependencies
 ------------

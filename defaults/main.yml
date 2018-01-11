@@ -1,2 +1,17 @@
 ---
 # defaults file for kentr.harden-wordpress
+
+# See https://codex.wordpress.org/Hardening_WordPress#WP-Config.php
+wp_harden_block_wpconfig: True
+
+# See https://codex.wordpress.org/Hardening_WordPress#WP-Includes
+wp_harden_block_include_only_files: True
+
+# See https://codex.wordpress.org/Hardening_WordPress#WP-Content.2FUploads
+wp_harden_block_uploads_php: True
+
+# See https://codex.wordpress.org/Hardening_WordPress#Disable_File_Editing
+wp_harden_disable_file_edits: True
+
+# Block access to some log files.
+wp_harden_block_log_files: True
