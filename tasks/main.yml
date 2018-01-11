@@ -1,5 +1,69 @@
 ---
 # tasks file for kentr.harden-wordpress
 
-- include: harden-instance.yml
-  with_items: "{{ installations }}"
+- name: Check for WordPress installation.
+  stat:
+    path: "{{ wp_harden_document_root }}/wp-config.php"
+  register: wp_config
+
+- name: Fail on invalid installation.
+  fail:
+    msg: |
+      This doesn't appear to be a valid WordPress installation.
+      Can't find {{ wp_harden_document_root }}/wp-config.php.
+  when: wp_config.stat.isreg | default(False) == False
+
+- name: Disable PHP execution in uploads directory.
+  blockinfile:
+    dest:  "{{ wp_harden_document_root }}/{{ wp_harden_uploads_dir | default('wp-content/uploads') }}/.htaccess"
+    create: yes
+    backup: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertafter: EOF
+    state: present
+    content: |
+      # Disable PHP execution in uploads directory.
+      # See https://codex.wordpress.org/Hardening_WordPress#WP-Content.2FUploads
+      <Files *.php>
+      deny from all
+      </Files>
+  when: wordpress_harden_disable_uploads_php | default(True)
+
+- name: Ensure .htaccess exists.
+  template:
+    # Don't replace existing file.
+    force: no
+    src: templates/.htaccess.j2
+    dest: "{{ wp_harden_document_root }}/.htaccess"
+
+- name: Deny access to wp-config.php.
+  blockinfile:
+    dest:  "{{ wp_harden_document_root }}/.htaccess"
+    create: no
+    backup: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertafter: "# END WordPress"
+    state: present
+    content: |
+      # Deny access to wp-config.php.
+      # See https://codex.wordpress.org/Hardening_WordPress#WP-Config.php
+      <files wp-config.php>
+      order allow,deny
+      deny from all
+      </files>
+  when: wordpress_harden_deny_wpconfig_access | default(True)
+
+- name: Disable file editing.
+  blockinfile:
+    dest:  "{{ wp_harden_document_root }}/wp-config.php"
+    create: no
+    backup: yes
+    marker: "//# {mark} ANSIBLE MANAGED BLOCK"
+    insertbefore: ".*stop editing.*"
+    state: present
+    content: |
+      // Disable file editing.
+      // See https://codex.wordpress.org/Hardening_WordPress#Disable_File_Editing
+      // Disable Editing in Dashboard
+      define('DISALLOW_FILE_EDIT', true);
+  when: wordpress_harden_disable_file_edits | default(True)
